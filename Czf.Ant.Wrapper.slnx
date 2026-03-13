@@ -1,0 +1,18 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/NewFolder1/" />
+  <Project Path="ANT_Managed_Library/ANT_Managed_Library.csproj">
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="Czf.Ant.Wrapper/Czf.Ant.Wrapper.csproj">
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="Czf.Ant.Wrapper.Demo/Czf.Ant.Wrapper.Demo.csproj">
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="UnitTestProject1/UnitTestProject1.csproj">
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+</Solution>

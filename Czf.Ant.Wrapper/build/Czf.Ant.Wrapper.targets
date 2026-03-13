@@ -1,0 +1,20 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    Copy the native Dynastream ANT DLLs to the consuming project's output directory.
+    These DLLs must be present alongside the application executable at runtime.
+  -->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)win-x86\native\ANT_WrappedLib.dll">
+      <Link>ANT_WrappedLib.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)win-x86\native\DSI_SiUSBXp_3_1.dll">
+      <Link>DSI_SiUSBXp_3_1.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)win-x86\native\DSI_CP210xManufacturing_3_1.dll">
+      <Link>DSI_CP210xManufacturing_3_1.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

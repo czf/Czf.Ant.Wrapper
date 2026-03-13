@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <Platforms>x86</Platforms>
+
+    <!-- NuGet package -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Czf.Ant.Wrapper</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>czf</Authors>
+    <Description>
+      A high-level, event-driven wrapper over the ANT+ Managed Library that makes it easy to
+      discover ANT USB dongles, open channels, observe connection state, receive raw ANT messages,
+      and consume typed device-profile data (e.g. heart rate) without dealing with low-level
+      ANT_Device / ANT_Channel / ANT_Response plumbing.
+    </Description>
+    <PackageTags>ANT ANT+ Dynastream heart-rate-monitor sensor wrapper</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Include the XML documentation file in the package -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!--
+    Debug: project reference so you can step through the ANT_Managed_Library source.
+  -->
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ProjectReference Include="..\ANT_Managed_Library\ANT_Managed_Library.csproj">
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+  <!--
+    Release: use the pre-compiled managed DLL so it can be bundled into the NuGet package.
+    The DLL is built from the same ANT_Managed_Library source; rebuild lib\ when the source changes.
+  -->
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <Reference Include="ANT_Managed_Library">
+      <HintPath>lib\ANT_Managed_Library.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- Pack the managed wrapper DLL + symbols into lib\net10.0\ inside the NuGet package -->
+  <ItemGroup>
+    <None Include="lib\ANT_Managed_Library.dll" Pack="true" PackagePath="lib\net10.0\" Condition="'$(Configuration)' == 'Release'" />
+    <None Include="lib\ANT_Managed_Library.pdb" Pack="true" PackagePath="lib\net10.0\" Condition="'$(Configuration)' == 'Release'" />
+  </ItemGroup>
+
+  <!-- Pack native DLLs and the .targets file that copies them to consumer output directories -->
+  <ItemGroup>
+    <NativeLibs Include="build\win-x86\native\*.dll" />
+    <None Include="@(NativeLibs)" Pack="true" PackagePath="build\win-x86\native\">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="build\Czf.Ant.Wrapper.targets" Pack="true" PackagePath="build\" />
+  </ItemGroup>
+
+</Project>
