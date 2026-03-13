@@ -18,10 +18,16 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
+    - name: Build wrapper (Release)
+      # Produces the .nupkg into Czf.Ant.Wrapper/bin/x86/Release/,
+      # which is the local NuGet feed declared in nuget.config.
+      # This must run before restoring the full solution so the demo project
+      # can resolve its PackageReference to Czf.Ant.Wrapper in Release.
+      run: dotnet build Czf.Ant.Wrapper\Czf.Ant.Wrapper.csproj -c Release -p:Platform=x86
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore Czf.Ant.Wrapper.slnx -p:Configuration=Release -p:Platform=x86
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build Czf.Ant.Wrapper.slnx --no-restore -c Release -p:Platform=x86
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test UnitTestProject1\UnitTestProject1.csproj --no-build -c Release -p:Platform=x86 --verbosity normal
