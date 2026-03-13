@@ -23,6 +23,10 @@
 
     <!-- Include the XML documentation file in the package -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!-- Generate a .snupkg symbol package alongside the .nupkg -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <!--
