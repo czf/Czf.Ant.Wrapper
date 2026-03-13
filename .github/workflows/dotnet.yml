@@ -15,23 +15,16 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+    - name: Setup .NET x64
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: 10.0.x
-    - name: Install Microsoft Visual C++ 2015-2022 Redistributable
-      shell: powershell
-      run: |
-        # Download the x64 version of the latest supported VC++ Redistributable
-        Invoke-WebRequest -Uri https://aka.ms/vc14/vc_redist.x64.exe -OutFile vc_redist.x64.exe
-    
-        # Download the x86 version (recommended for compatibility)
-        #Invoke-WebRequest -Uri https://aka.ms/vc14/vc_redist.x86.exe -OutFile vc_redist.x86.exe
-
-        # Install silently (/quiet /norestart are the command line options)
-        ./vc_redist.x64.exe /install /quiet /norestart | Out-Null
-        #./vc_redist.x86.exe /install /quiet /norestart | Out-Null
-
+        architecture: x64
+    - name: Setup .NET x86
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 10.0.x
+        architecture: x86
     - name: Build wrapper (Release)
       # Produces the .nupkg into Czf.Ant.Wrapper/bin/x86/Release/,
       # which is the local NuGet feed declared in nuget.config.
