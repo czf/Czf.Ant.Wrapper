@@ -27,6 +27,9 @@
     <!-- Generate a .snupkg symbol package alongside the .nupkg -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageProjectUrl>https://github.com/czf/Czf.Ant.Wrapper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/czf/Czf.Ant.Wrapper</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <!--
@@ -64,5 +67,19 @@
     </None>
     <None Include="build\Czf.Ant.Wrapper.targets" Pack="true" PackagePath="build\" />
   </ItemGroup>
+
+  <!--
+    Before packing in Release, evict this package's version from the NuGet global packages
+    cache. Without this, consumers (e.g. Czf.Ant.Wrapper.Demo) would continue to use the
+    previously cached copy even after source changes, because NuGet serves 1.0.0 from
+    the global cache rather than re-reading the local feed.
+  -->
+  <Target Name="ClearLocalNuGetCache" BeforeTargets="Pack" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <_PackageCacheDir>$(NuGetPackageRoot)$([System.String]::Copy('$(PackageId)').ToLower())\$(Version)</_PackageCacheDir>
+    </PropertyGroup>
+    <RemoveDir Directories="$(_PackageCacheDir)" Condition="Exists('$(_PackageCacheDir)')" />
+    <Message Importance="high" Text="Cleared NuGet cache: $(_PackageCacheDir)" />
+  </Target>
 
 </Project>
